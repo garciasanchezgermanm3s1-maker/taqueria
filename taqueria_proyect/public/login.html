@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Taquería Miraflores</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Barra de navegación -->
+  <nav class="navbar">
+    <div class="logo">
+  <img src="logo_taqueria.png" alt="Logo Taquería" />
+</div>
+    <ul class="nav-links">
+      <li><a href="#">Menú</a></li>
+      <li><a href="#">Domicilio</a></li>
+      <li><a href="#">Contacto</a></li>
+    </ul>
+  </nav>
+
+  <!-- Contenedor principal -->
+  <div class="main-container">
+    <h1 class="title">Taquería Miraflores</h1>
+
+    <!-- Caja de login -->
+    <div class="login-container">
+      <h2>Iniciar Sesión o Registrarse</h2>
+      <form action="/login" method="POST">
+        <label for="usuario">Usuario</label>
+        <input type="text" id="usuario" name="usuario" required>
+
+        <label for="contrasena">Contraseña</label>
+        <input type="password" id="contrasena" name="contrasena" required>
+
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
