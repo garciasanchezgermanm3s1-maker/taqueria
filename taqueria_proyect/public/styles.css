@@ -93,3 +93,27 @@
 .login-container button:hover {
   background-color: #b71c1c;
 }
+
+/* Enlace de registro */
+.signup-link {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.signup-link p {
+  margin: 0;
+  color: #333;
+  font-size: 14px;
+}
+
+.signup-link a {
+  color: #c62828;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.signup-link a:hover {
+  color: #b71c1c;
+  text-decoration: underline;
+}
