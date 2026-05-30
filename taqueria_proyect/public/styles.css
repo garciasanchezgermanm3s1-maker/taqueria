@@ -21,8 +21,8 @@ body {
 }
 
 .navbar .logo img {
-  height: 40px;       /* ajusta el tamaño del logo */
-  width: auto;
+  height: 80px;       /* tamaño más grande del logo */
+  width: auto;        /* mantiene proporción */
   border-radius: 4px; /* opcional, esquinas redondeadas */
   background-color: transparent;
 }
