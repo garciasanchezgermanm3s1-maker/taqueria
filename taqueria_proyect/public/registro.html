@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro - Taquería Miraflores</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Barra de navegación -->
+  <nav class="navbar">
+    <div class="logo">
+      <img src="logo_taqueria.png" alt="Logo Taquería" />
+    </div>
+    <ul class="nav-links">
+      <li><a href="menu.html">Menú</a></li>
+      <li><a href="domicilio.html">Domicilio</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+    </ul>
+  </nav>
+
+  <!-- Contenedor principal -->
+  <div class="main-container">
+    <h1 class="title">Taquería Miraflores</h1>
+
+    <!-- Caja de registro -->
+    <div class="login-container">
+      <h2>Registro de Usuario</h2>
+      <form action="/registro" method="POST">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="apellidos">Apellidos</label>
+        <input type="text" id="apellidos" name="apellidos" required>
+
+        <label for="contrasena">Contraseña</label>
+        <input type="password" id="contrasena" name="contrasena" required>
+
+        <button type="submit">Registrarse</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
