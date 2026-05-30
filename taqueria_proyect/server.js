@@ -1,39 +1,68 @@
 const express = require("express");
-const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const { MongoClient } = require("mongodb");
 const path = require("path");
-const Usuario = require("./models/usuario");
 
 const app = express();
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public"))); // Servir archivos estáticos
 
 // Conexión a MongoDB
-mongoose.connect("mongodb://127.0.0.1:27017/taqueria", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("✅ Conectado a MongoDB"))
-.catch(err => console.error("❌ Error de conexión:", err));
+const uri = "mongodb://localhost:27017"; // tu MongoDB local
+const client = new MongoClient(uri);
 
-// Servir archivos estáticos (HTML, CSS, JS)
-app.use(express.static(path.join(__dirname, "public")));
-
-// Ruta para procesar login
-app.post("/login", async (req, res) => {
-  const { usuario, contrasena } = req.body;
-
+async function conectar() {
   try {
-    const user = await Usuario.findOne({ nombre: usuario, contrasena: contrasena });
-    if (user) {
-      res.send("✅ Login exitoso, bienvenido " + user.nombre);
-    } else {
-      res.send("❌ Usuario o contraseña incorrectos");
-    }
-  } catch (err) {
-    res.status(500).send("Error en el servidor");
+    await client.connect();
+    console.log("✅ Conectado a MongoDB");
+  } catch (error) {
+    console.error("❌ Error conectando a MongoDB:", error);
   }
-});
+}
 
-app.listen(3000, () => {
-  console.log("Servidor corriendo en http://localhost:3000");
-});
+async function iniciarServidor() {
+  await conectar();
+  const db = client.db("taqueria"); // nombre de tu base
+  const usuarios = db.collection("usuario"); // colección (tabla)
+
+  // Servir página de login
+  app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "login.html"));
+  });
+
+  // Ruta para login
+  app.post("/login", async (req, res) => {
+    try {
+      const { usuario, contrasena } = req.body;
+      const usuarioEncontrado = await usuarios.findOne({ nombre: usuario, contrasena: contrasena });
+      if (usuarioEncontrado) {
+        res.send("Bienvenido " + usuarioEncontrado.nombre + " 😃");
+      } else {
+        res.send("Usuario o contraseña incorrectos ❌");
+      }
+    } catch (error) {
+      console.error("Error en login:", error);
+      res.status(500).send("Error en el servidor");
+    }
+  });
+
+  // Ruta para registro
+  app.post("/registro", async (req, res) => {
+    try {
+      const { nombre, contrasena } = req.body;
+      await usuarios.insertOne({ nombre, contrasena });
+      res.send("Usuario registrado con éxito 🎉");
+    } catch (error) {
+      console.error("Error en registro:", error);
+      res.status(500).send("Error al registrar");
+    }
+  });
+
+  // Iniciar servidor
+  app.listen(3000, () => {
+    console.log("🚀 Servidor corriendo en http://localhost:3000");
+  });
+}
+
+iniciarServidor();
+
