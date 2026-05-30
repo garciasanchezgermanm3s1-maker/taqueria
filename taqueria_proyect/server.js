@@ -49,8 +49,19 @@ async function iniciarServidor() {
   // Ruta para registro
   app.post("/registro", async (req, res) => {
     try {
-      const { nombre, contrasena } = req.body;
-      await usuarios.insertOne({ nombre, contrasena });
+      const { nombre, apellidos, contrasena } = req.body;
+      
+      // Obtener el último ID registrado y sumarle 1
+      const ultimoUsuario = await usuarios.findOne({}, { sort: { id: -1 } });
+      const nuevoId = ultimoUsuario ? ultimoUsuario.id + 1 : 1;
+      
+      // Guardar en el orden: id, nombre, apellidos, contraseña
+      await usuarios.insertOne({ 
+        id: nuevoId,
+        nombre, 
+        apellidos, 
+        contrasena 
+      });
       res.send("Usuario registrado con éxito 🎉");
     } catch (error) {
       console.error("Error en registro:", error);
