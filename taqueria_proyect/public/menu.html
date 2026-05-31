@@ -21,50 +21,121 @@
   <!-- Contenedor principal -->
   <div class="main-container">
     <h1 class="title">Taquería Miraflores</h1>
-    <p class="subtitle">Descripción</p>
 
     <div class="menu-layout">
-      <!-- Lado izquierdo -->
+      <!-- Índice lateral con categorías -->
       <div class="menu-sidebar">
-        <div class="menu-section">Comida</div>
-        <details>
-          <summary>Comida</summary>
-          <div class="categoria" onclick="cambiarImagen('tacos.jpg')">Tacos</div>
-          <div class="categoria" onclick="cambiarImagen('quesadillas.jpg')">Quesadillas</div>
-          <div class="categoria" onclick="cambiarImagen('gringas.jpg')">Gringas</div>
-        </details>
-        <div class="menu-section">Bebida</div>
-        <details>
-          <summary>Bebidas</summary>
-          <div class="categoria" onclick="cambiarImagen('horchata.jpg')">Aguas</div>
-          <div class="categoria" onclick="cambiarImagen('jugo.jpg')">Jugos</div>
-          <div class="categoria" onclick="cambiarImagen('refresco.jpg')">Refrescos</div>
-        </details>
+        <h2 class="sidebar-title">Categorías</h2>
+        <button onclick="mostrarCategoria('tacos')">Tacos</button>
+        <button onclick="mostrarCategoria('quesadillas')">Quesadillas</button>
+        <button onclick="mostrarCategoria('gringas')">Gringas</button>
+        <button onclick="mostrarCategoria('tortas')">Tortas</button>
+        <button onclick="mostrarCategoria('extras')">Extras</button>
+        <button onclick="mostrarCategoria('bebidas')">Bebidas</button>
       </div>
 
-      <!-- Centro: espacio para menú -->
-      <div class="menu-content">
-        <p>Espacio para menú</p>
-        <img id="imagenMenu" src="tacos.jpg" alt="Menú Taquería" style="max-width: 100%; border-radius: 8px; margin-top: 20px;" />
+      <!-- Centro: menú dinámico -->
+      <div class="menu-content" id="menu-content">
+        <p>Selecciona una categoría para ver los productos</p>
       </div>
 
-      <!-- Lado derecho -->
+      <!-- Carrito -->
       <div class="menu-extra">
-        <div class="menu-box">Imágenes representativas</div>
-        <div class="menu-info">
-          <span class="icon">⭐</span> Rating
-        </div>
-        <div class="menu-info">
-          <span class="icon">📍</span> Dirección
-        </div>
+        <h3>Carrito</h3>
+        <ul id="carrito"></ul>
+        <button id="comprar-btn">Comprar/Pedir</button>
       </div>
     </div>
   </div>
 
   <script>
-    function cambiarImagen(imagen) {
-      document.getElementById("imagenMenu").src = imagen;
+    // 🔧 Datos del menú (modifica aquí los productos)
+    const menuData = {
+      tacos: [
+        { nombre: "Al Pastor", precio: 50 },
+        { nombre: "Suadero", precio: 50 },
+        { nombre: "Carnitas", precio: 50 },
+        { nombre: "De Canasta", precio: 50 },
+        { nombre: "Chorizo", precio: 50 }
+      ],
+      quesadillas: [
+        { nombre: "Pastor", precio: 50 },
+        { nombre: "Queso", precio: 50 },
+        { nombre: "Huitlacoche", precio: 50 },
+        { nombre: "Chicharrón", precio: 50 },
+        { nombre: "Pescado", precio: 50 }
+      ],
+      gringas: [
+        { nombre: "Clásica", precio: 50 },
+        { nombre: "Especial", precio: 50 },
+        { nombre: "Norteña", precio: 50 }
+      ],
+      tortas: [
+        { nombre: "Cubana", precio: 50 },
+        { nombre: "Pastor", precio: 50 },
+        { nombre: "Milanesa", precio: 50 },
+        { nombre: "Mixta", precio: 50 }
+      ],
+      extras: [
+        { nombre: "Orden de Cebollitas", precio: 50 },
+        { nombre: "Guacamole", precio: 50 },
+        { nombre: "Salsa Especial", precio: 50 }
+      ],
+      bebidas: [
+        // Aquí luego agregas las bebidas
+      ]
+    };
+
+    const carrito = [];
+
+    // Mostrar productos de una categoría
+    function mostrarCategoria(categoria) {
+      const contenedor = document.getElementById("menu-content");
+      contenedor.innerHTML = `<h2>${categoria.toUpperCase()}</h2>`;
+
+      menuData[categoria].forEach((item, index) => {
+        const div = document.createElement("div");
+        div.classList.add("menu-item");
+        div.innerHTML = `
+          <p><strong>${item.nombre}</strong> - $${item.precio}</p>
+          <button onclick="agregarAlCarrito('${categoria}', ${index})">Agregar</button>
+        `;
+        contenedor.appendChild(div);
+      });
     }
+
+    // Agregar al carrito
+    function agregarAlCarrito(categoria, index) {
+      const producto = menuData[categoria][index];
+      carrito.push(producto);
+      actualizarCarrito();
+    }
+
+    // Actualizar carrito
+    function actualizarCarrito() {
+      const carritoLista = document.getElementById("carrito");
+      carritoLista.innerHTML = "";
+
+      carrito.forEach((producto, i) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span>${producto.nombre} - $${producto.precio}</span>
+          <button class="eliminar-btn" onclick="eliminarDelCarrito(${i})">X</button>
+        `;
+        carritoLista.appendChild(li);
+      });
+    }
+
+    // Eliminar producto del carrito
+    function eliminarDelCarrito(index) {
+      carrito.splice(index, 1);
+      actualizarCarrito();
+    }
+
+    // Botón comprar (todavía no guarda en DB)
+    document.getElementById("comprar-btn").addEventListener("click", () => {
+      alert("🛒 Pedido listo para procesar (aún no se guarda en DB).");
+    });
   </script>
 </body>
 </html>
